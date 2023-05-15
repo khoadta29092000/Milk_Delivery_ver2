@@ -16,7 +16,9 @@ namespace DataAccess.Repository
         public  Task DeleteMember(string m) => AccountDAO.DeleteTblAccount(m);
         public  Task ChangePassword(string TblAccountID, string password) => AccountDAO.Instance.ChangePassword(TblAccountID, password);
         public  Task UpdateActive(string TblAccountID, bool active) => AccountDAO.Instance.UpdateActive(TblAccountID, active);
-        public  Task AddMember(TblAccount m) => AccountDAO.AddTblAccount(m);
+        public Task VerificationAccount(string TblAccountID, bool active) => AccountDAO.Instance.VerificationAccount(TblAccountID, active);
+
+        public Task AddMember(TblAccount m) => AccountDAO.AddTblAccount(m);
         public  Task UpdateMember(TblAccount m) => AccountDAO.UpdateTblAccount(m);
         public  Task<List<TblAccount>> SearchByEmail(string? search,int roleId , int page, int pageSize) => AccountDAO.Instance.SearchByEmail(search, roleId, page, pageSize);
        

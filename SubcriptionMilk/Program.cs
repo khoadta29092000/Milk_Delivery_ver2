@@ -25,7 +25,9 @@ builder.Services.AddControllers()
     });
 builder.Services.AddDbContext<MilkDBContext>();
 builder.Services.AddScoped<VerificationCodeCleanupService>();
+
 builder.Services.AddSingleton<IRepositoryAccount, AccountRepository>();
+builder.Services.AddSingleton<IRepositoryVerificationCode, VerificationCodeRepository>();
 
 var configuration = builder.Configuration;
 var secretKey = configuration["Appsettings:SecretKey"];

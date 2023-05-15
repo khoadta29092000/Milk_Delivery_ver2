@@ -14,7 +14,9 @@ namespace DataAccess.Repository
          Task<TblAccount>  GetProfile(string AccountID);
          Task ChangePassword(string AccountID, string password);
          Task UpdateActive(string AccountID, bool active);
-         Task DeleteMember(string m);
+        Task VerificationAccount(string AccountID, bool active);
+
+        Task DeleteMember(string m);
 
          Task UpdateMember(TblAccount m);
          Task AddMember(TblAccount m);

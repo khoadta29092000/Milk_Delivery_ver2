@@ -22,7 +22,7 @@ namespace BusinessObject.Models
         public int RoleId { get; set; }
         public DateTime CreateDate { get; set; }
         public bool IsDeleted { get; set; }
-        public bool? IsVerified { get; set; }
+        public bool IsVerified { get; set; }
 
         public virtual TblRole? Role { get; set; }
         public virtual ICollection<TblVerificationCode> TblVerificationCodes { get; set; }

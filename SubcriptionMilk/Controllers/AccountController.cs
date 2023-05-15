@@ -1,39 +1,34 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using BusinessObject.Models;
 using DataAccess.Repository;
-using DataAccess.DAO;
-using System;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.Extensions.Configuration;
 using System.IdentityModel.Tokens.Jwt;
 using System.Text;
 using Microsoft.IdentityModel.Tokens;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.Win32;
-using Newtonsoft.Json.Linq;
 using SubcriptionMilk.DTO;
 using System.Security.Cryptography;
-using Microsoft.EntityFrameworkCore;
-using System.Net.Mail;
-using System.Net;
-using System.Xml.Linq;
+using EASendMail;
+using System.Xml;
 
-namespace CinemaSystem.Controllers
+namespace SubcriptionMilk.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
     public class AccountController : ControllerBase
     {
         private readonly IRepositoryAccount repositoryAccount;
+        private readonly IRepositoryVerificationCode repositoryVerificationCode;
         private readonly IConfiguration configuration;
-        public AccountController(IRepositoryAccount _repositoryAccount, IConfiguration configuration)
+        public AccountController(IRepositoryAccount _repositoryAccount, IRepositoryVerificationCode _repositoryVerificationCode, IConfiguration configuration)
         {
             repositoryAccount = _repositoryAccount;
             this.configuration = configuration;
-
+            repositoryVerificationCode = _repositoryVerificationCode;
         }
+
+
+
 
         public static string GenerateSalt()
         {
@@ -205,6 +200,7 @@ namespace CinemaSystem.Controllers
                 {
                     return StatusCode(409, new { StatusCode = 409, Message = "Confirm Password not correct password" });
                 }
+                DateTime currentDateSQL = DateTime.SpecifyKind(DateTime.Now, DateTimeKind.Local);
                 DateTime currentDate = DateTime.Now;
                 string formatDate = currentDate.ToString("ddMMyyyy");
                 var saltPassword = GenerateSalt();
@@ -212,12 +208,53 @@ namespace CinemaSystem.Controllers
                 var AccountList = await repositoryAccount.GetMembers();
                 int count = AccountList.Count(item => item.Id.StartsWith("ACC" + currentDate.ToString("ddMMyyyy")));
                 var id = "ACC" + formatDate + (count + 1);
+                string verificationCode = GenerateVerificationCode();
+                string subject = "Verification Code";
+                string body = @"<!DOCTYPE html>
+    <html lang=""en"">
+    <head>
+        <meta charset=""utf-8"" />
+        <meta name=""viewport"" content=""width=device-width, initial-scale=1.0"" />
+    </head>
+    <body style="" text-align: center; padding: 40px 0; background: #EBF0F5;  width: 100%; height: 100%;"">
+    <div style=""
+        background: white;
+        padding-left: 300px;
+    padding-right: 300px;
+    padding-top: 50;
+    padding-bottom: 50px;
+        border-radius: 4px;
+        box-shadow: 0 2px 3px #C8D0D8;
+        display: inline-block;
+        margin: 0 auto;
+    "" class=""card"">
+        <h1 style="" color: #008CBA;font-size: 40px;""> ATSHARE</h1>
+        <hr />
+        <img style="""" src=""https://firebasestorage.googleapis.com/v0/b/carmanaager-upload-file.appspot.com/o/images%2Flogo-color%20(1).pngeddab547-393c-4a52-8228-389b00aeacad?alt=media&token=a9fe5d57-b871-46a0-a9da-508902f09832&fbclid=IwAR0naf-IAgqC0ireg_vTPIvu9q0dK_n0gqKdNHhWFhvOyvhjWph-boPTWYk"" />
+        <h1 style="" color: #59c91c; font-family: "" Nunito Sans"", ""Helvetica Neue"" , sans-serif;
+            font-weight: 900;
+            font-size: 40px;
+            margin-bottom: 10px;"">
+            Hợp đồng
+        </h1>
+        <p style="" padding-top: 5px;
+        color: #404F5E;
+        font-family: "" Nunito Sans"", ""Helvetica Neue"" , sans-serif;
+           font-size: 20px;
+           margin: 0;"">Verification Code</p>
+           <p style="" padding-top: 5px;
+           color: #404F5E;
+          
+           font-family: "" Nunito Sans"", ""Helvetica Neue"" , sans-serif;
+              font-size: 20px;
+              margin: 0;"">" + verificationCode + @" </p>               
+</body></html>";
                 var newAcc = new TblAccount
                 {
                     IsDeleted = false,
                     Address = null,
                     ImageCard = "https://bloganchoi.com/wp-content/uploads/2022/02/avatar-trang-y-nghia.jpeg",
-                    CreateDate = currentDate,
+                    CreateDate = currentDateSQL,
                     Email = acc.Email,
                     FullName = acc.FullName,
                     Gender = acc.Gender,
@@ -228,31 +265,34 @@ namespace CinemaSystem.Controllers
                     RoleId = 2,
                     IsVerified = false
                 };
-                //await repositoryAccount.AddMember(newAcc);
-                string verificationCode = GenerateVerificationCode();
-                string subject = "Verification Code";
-                string body = $"Your verification code is: {verificationCode}";
-                using (MailMessage message = new MailMessage())
+                var newVerificationCode = new TblVerificationCode
                 {
-                    message.From = new MailAddress("system.milk.delivery@gmail.com"); // Địa chỉ email gửi
-                    message.To.Add(acc.Email); // Địa chỉ email người nhận
-                    message.Subject = subject;
-                    message.Body = body;
-                    message.IsBodyHtml = true;
+                    AccountId = id,
+                    Code = verificationCode,
+                    ExpirationTime = DateTime.Now,
+                };
+                await repositoryAccount.AddMember(newAcc);
+                await repositoryVerificationCode.AddVerificationCode(newVerificationCode);
 
-                    // Cấu hình SMTP server
-                    SmtpClient smtp = new SmtpClient("smtp.example.com");
-                    smtp.Port = 465; // Sử dụng cổng SMTP TLS/SSL
 
-                    smtp.EnableSsl = true; // Bật chế độ SSL
-                    smtp.UseDefaultCredentials = false; // Tắt sử dụng thông tin đăng nhập mặc định
+                SmtpMail oMail = new SmtpMail("TryIt");
+                oMail.From = "system.milk.delivery@gmail.com";
+                oMail.To = acc.Email;
+                oMail.Subject = subject;
+                oMail.HtmlBody = body;
+                SmtpServer oServer = new SmtpServer("smtp.gmail.com");
+                oServer.User = "system.milk.delivery@gmail.com";
+                oServer.Password = "ukbhmjdaaacdyyxh";
 
-                    // Xác thực thông tin đăng nhập
-                    smtp.Credentials = new NetworkCredential("system.milk.delivery@gmail.com", "KhoaNgu123");
+                // Set 465 port
+                oServer.Port = 465;
 
-                    // Gửi email
-                    smtp.Send(message);
-                }
+                // detect SSL/TLS automatically
+                oServer.ConnectType = SmtpConnectType.ConnectSSLAuto; ;
+                SmtpClient oSmtp = new SmtpClient();
+                oSmtp.SendMail(oServer, oMail);
+
+
                 return Ok(new { StatusCode = 200, Message = "Register successful" });
             }
             catch (Exception ex)

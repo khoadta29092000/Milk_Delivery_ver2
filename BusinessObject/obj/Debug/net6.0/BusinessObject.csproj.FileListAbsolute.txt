@@ -12,3 +12,17 @@ C:\Users\DELL\source\repos\Xao-me\BusinessObject\obj\Debug\net6.0\refint\Busines
 C:\Users\DELL\source\repos\Xao-me\BusinessObject\obj\Debug\net6.0\BusinessObject.pdb
 C:\Users\DELL\source\repos\Xao-me\BusinessObject\obj\Debug\net6.0\BusinessObject.genruntimeconfig.cache
 C:\Users\DELL\source\repos\Xao-me\BusinessObject\obj\Debug\net6.0\ref\BusinessObject.dll
+C:\Users\User\Desktop\milev2\Milk_Delivery_ver2\BusinessObject\bin\Debug\net6.0\BusinessObject.deps.json
+C:\Users\User\Desktop\milev2\Milk_Delivery_ver2\BusinessObject\bin\Debug\net6.0\BusinessObject.runtimeconfig.json
+C:\Users\User\Desktop\milev2\Milk_Delivery_ver2\BusinessObject\bin\Debug\net6.0\BusinessObject.dll
+C:\Users\User\Desktop\milev2\Milk_Delivery_ver2\BusinessObject\bin\Debug\net6.0\BusinessObject.pdb
+C:\Users\User\Desktop\milev2\Milk_Delivery_ver2\BusinessObject\obj\Debug\net6.0\BusinessObject.csproj.AssemblyReference.cache
+C:\Users\User\Desktop\milev2\Milk_Delivery_ver2\BusinessObject\obj\Debug\net6.0\BusinessObject.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\User\Desktop\milev2\Milk_Delivery_ver2\BusinessObject\obj\Debug\net6.0\BusinessObject.AssemblyInfoInputs.cache
+C:\Users\User\Desktop\milev2\Milk_Delivery_ver2\BusinessObject\obj\Debug\net6.0\BusinessObject.AssemblyInfo.cs
+C:\Users\User\Desktop\milev2\Milk_Delivery_ver2\BusinessObject\obj\Debug\net6.0\BusinessObject.csproj.CoreCompileInputs.cache
+C:\Users\User\Desktop\milev2\Milk_Delivery_ver2\BusinessObject\obj\Debug\net6.0\BusinessObject.dll
+C:\Users\User\Desktop\milev2\Milk_Delivery_ver2\BusinessObject\obj\Debug\net6.0\refint\BusinessObject.dll
+C:\Users\User\Desktop\milev2\Milk_Delivery_ver2\BusinessObject\obj\Debug\net6.0\BusinessObject.pdb
+C:\Users\User\Desktop\milev2\Milk_Delivery_ver2\BusinessObject\obj\Debug\net6.0\BusinessObject.genruntimeconfig.cache
+C:\Users\User\Desktop\milev2\Milk_Delivery_ver2\BusinessObject\obj\Debug\net6.0\ref\BusinessObject.dll

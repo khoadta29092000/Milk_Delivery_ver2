@@ -15,6 +15,6 @@ namespace SubcriptionMilk.DTO
         public int RoleId { get; set; }
         public DateTime CreateDate { get; set; }
         public bool IsDeleted { get; set; }
-
+        public bool isVerified { get; set; }
     }
 }

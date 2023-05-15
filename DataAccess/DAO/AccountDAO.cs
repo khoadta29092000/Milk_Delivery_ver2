@@ -189,7 +189,8 @@ namespace DataAccess.DAO
                     Gender = c.Gender,
                     ImageCard = c.ImageCard,
                     CreateDate = c.CreateDate,
-                    IsDeleted = c.IsDeleted
+                    IsDeleted = c.IsDeleted,
+                    IsVerified = c.IsVerified
                 }).Skip((page - 1) * pageSize).Take(pageSize);
                 searchResult = searchValues.ToList();
             }
@@ -211,7 +212,8 @@ namespace DataAccess.DAO
                                               ImageCard = member.ImageCard,
                                               RoleId = member.RoleId,
                                               CreateDate = member.CreateDate,
-                                              IsDeleted = member.IsDeleted
+                                              IsDeleted = member.IsDeleted,
+                                              IsVerified = member.IsVerified
                                           }).ToListAsync();
 
                     if (RoleId != 0)
@@ -262,6 +264,25 @@ namespace DataAccess.DAO
                 {
                     db.TblAccounts.Attach(user);
                     db.Entry(user).Property(x => x.IsDeleted).IsModified = true;
+                    await db.SaveChangesAsync();
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+        public async Task VerificationAccount(string TblAccountID, bool acticve)
+        {
+
+            try
+            {
+
+                var user = new TblAccount() { Id = TblAccountID, IsVerified = true };
+                using (var db = new MilkDBContext())
+                {
+                    db.TblAccounts.Attach(user);
+                    db.Entry(user).Property(x => x.IsVerified).IsModified = true;
                     await db.SaveChangesAsync();
                 }
             }

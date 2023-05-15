@@ -1,27 +1,25 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\DELL\\source\\repos\\Xao-me\\DataAccess\\DataAccess.csproj": {}
+    "C:\\Users\\User\\Desktop\\milev2\\Milk_Delivery_ver2\\DataAccess\\DataAccess.csproj": {}
   },
   "projects": {
-    "C:\\Users\\DELL\\source\\repos\\Xao-me\\BusinessObject\\BusinessObject.csproj": {
+    "C:\\Users\\User\\Desktop\\milev2\\Milk_Delivery_ver2\\BusinessObject\\BusinessObject.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\DELL\\source\\repos\\Xao-me\\BusinessObject\\BusinessObject.csproj",
+        "projectUniqueName": "C:\\Users\\User\\Desktop\\milev2\\Milk_Delivery_ver2\\BusinessObject\\BusinessObject.csproj",
         "projectName": "BusinessObject",
-        "projectPath": "C:\\Users\\DELL\\source\\repos\\Xao-me\\BusinessObject\\BusinessObject.csproj",
-        "packagesPath": "C:\\Users\\DELL\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\DELL\\source\\repos\\Xao-me\\BusinessObject\\obj\\",
+        "projectPath": "C:\\Users\\User\\Desktop\\milev2\\Milk_Delivery_ver2\\BusinessObject\\BusinessObject.csproj",
+        "packagesPath": "C:\\Users\\User\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\User\\Desktop\\milev2\\Milk_Delivery_ver2\\BusinessObject\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\DELL\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+          "C:\\Users\\User\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net6.0"
         ],
         "sources": {
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -40,6 +38,10 @@
         "net6.0": {
           "targetAlias": "net6.0",
           "dependencies": {
+            "EASendMail": {
+              "target": "Package",
+              "version": "[7.9.1.7, )"
+            },
             "Microsoft.AspNetCore.Authentication.JwtBearer": {
               "target": "Package",
               "version": "[6.0.10, )"
@@ -93,36 +95,34 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.203\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.202\\RuntimeIdentifierGraph.json"
         }
       }
     },
-    "C:\\Users\\DELL\\source\\repos\\Xao-me\\DataAccess\\DataAccess.csproj": {
+    "C:\\Users\\User\\Desktop\\milev2\\Milk_Delivery_ver2\\DataAccess\\DataAccess.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\DELL\\source\\repos\\Xao-me\\DataAccess\\DataAccess.csproj",
+        "projectUniqueName": "C:\\Users\\User\\Desktop\\milev2\\Milk_Delivery_ver2\\DataAccess\\DataAccess.csproj",
         "projectName": "DataAccess",
-        "projectPath": "C:\\Users\\DELL\\source\\repos\\Xao-me\\DataAccess\\DataAccess.csproj",
-        "packagesPath": "C:\\Users\\DELL\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\DELL\\source\\repos\\Xao-me\\DataAccess\\obj\\",
+        "projectPath": "C:\\Users\\User\\Desktop\\milev2\\Milk_Delivery_ver2\\DataAccess\\DataAccess.csproj",
+        "packagesPath": "C:\\Users\\User\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\User\\Desktop\\milev2\\Milk_Delivery_ver2\\DataAccess\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\DELL\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+          "C:\\Users\\User\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net6.0"
         ],
         "sources": {
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "net6.0": {
             "targetAlias": "net6.0",
             "projectReferences": {
-              "C:\\Users\\DELL\\source\\repos\\Xao-me\\BusinessObject\\BusinessObject.csproj": {
-                "projectPath": "C:\\Users\\DELL\\source\\repos\\Xao-me\\BusinessObject\\BusinessObject.csproj"
+              "C:\\Users\\User\\Desktop\\milev2\\Milk_Delivery_ver2\\BusinessObject\\BusinessObject.csproj": {
+                "projectPath": "C:\\Users\\User\\Desktop\\milev2\\Milk_Delivery_ver2\\BusinessObject\\BusinessObject.csproj"
               }
             }
           }
@@ -152,7 +152,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.203\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.202\\RuntimeIdentifierGraph.json"
         }
       }
     }
