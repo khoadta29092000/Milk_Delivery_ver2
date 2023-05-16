@@ -8,38 +8,30 @@ using System.Threading.Tasks;
 
 namespace MyVerificationCodeCleanupProject.Services
 {
-    public class VerificationCodeCleanupService : IHostedService, IDisposable
+    public class VerificationCodeCleanupService : BackgroundService
     {
-        private Timer _timer;
-        private readonly MilkDBContext _context;
+        private readonly IServiceProvider _serviceProvider;
 
-        public VerificationCodeCleanupService(MilkDBContext context)
+        public VerificationCodeCleanupService(IServiceProvider serviceProvider)
         {
-            _context = context;
+            _serviceProvider = serviceProvider;
         }
 
-        public Task StartAsync(CancellationToken cancellationToken)
+        protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            _timer = new Timer(DoWork, null, TimeSpan.Zero, TimeSpan.FromMinutes(15)); // Chạy công việc định kỳ mỗi giờ
-            return Task.CompletedTask;
-        }
+            while (!stoppingToken.IsCancellationRequested)
+            {
+                using (var scope = _serviceProvider.CreateScope())
+                {
+                    var dbContext = scope.ServiceProvider.GetRequiredService<MilkDBContext>();
+                    var expiredCodes = dbContext.TblVerificationCodes.Where(vc => vc.ExpirationTime < DateTime.Now);
+                    dbContext.TblVerificationCodes.RemoveRange(expiredCodes);
+                    dbContext.SaveChanges();
+                }
 
-        private void DoWork(object state)
-        {
-            var expiredCodes = _context.TblVerificationCodes.Where(vc => vc.ExpirationTime < DateTime.UtcNow);
-            _context.TblVerificationCodes.RemoveRange(expiredCodes);
-            _context.SaveChanges();
-        }
-
-        public Task StopAsync(CancellationToken cancellationToken)
-        {
-            _timer?.Change(Timeout.Infinite, 0);
-            return Task.CompletedTask;
-        }
-
-        public void Dispose()
-        {
-            _timer?.Dispose();
+  
+                await Task.Delay(TimeSpan.FromDays(1), stoppingToken);
+            }
         }
     }
 }

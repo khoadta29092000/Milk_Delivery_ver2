@@ -27,6 +27,7 @@ namespace BusinessObject.Models
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
                 optionsBuilder.UseSqlServer("Server=USER88\\SQLEXPRESS;TrustServerCertificate=True;Database=Milk_System;Uid=sa;password=123;Integrated Security=True");
                 //optionsBuilder.UseSqlServer("Server=DESKTOP-5FOPUL4.\\SQLEXPRESS;TrustServerCertificate=True;Database=Milk_System;Uid=sa;password=1;Integrated Security=True");
+                //optionsBuilder.UseSqlServer("workstation id = Milk-DB.mssql.somee.com; packet size = 4096; user id = tiensidiien_SQLLogin_1; pwd = uaeovuatgl; data source = Milk-DB.mssql.somee.com; persist security info = False; initial catalog = Milk-DB ; Encrypt=false;TrustServerCertificate=true");
             }
         }
 

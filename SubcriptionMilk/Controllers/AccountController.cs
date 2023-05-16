@@ -211,44 +211,23 @@ namespace SubcriptionMilk.Controllers
                 string verificationCode = GenerateVerificationCode();
                 string subject = "Verification Code";
                 string body = @"<!DOCTYPE html>
-    <html lang=""en"">
-    <head>
-        <meta charset=""utf-8"" />
-        <meta name=""viewport"" content=""width=device-width, initial-scale=1.0"" />
-    </head>
-    <body style="" text-align: center; padding: 40px 0; background: #EBF0F5;  width: 100%; height: 100%;"">
-    <div style=""
-        background: white;
-        padding-left: 300px;
-    padding-right: 300px;
-    padding-top: 50;
-    padding-bottom: 50px;
-        border-radius: 4px;
-        box-shadow: 0 2px 3px #C8D0D8;
-        display: inline-block;
-        margin: 0 auto;
-    "" class=""card"">
-        <h1 style="" color: #008CBA;font-size: 40px;""> ATSHARE</h1>
-        <hr />
-        <img style="""" src=""https://firebasestorage.googleapis.com/v0/b/carmanaager-upload-file.appspot.com/o/images%2Flogo-color%20(1).pngeddab547-393c-4a52-8228-389b00aeacad?alt=media&token=a9fe5d57-b871-46a0-a9da-508902f09832&fbclid=IwAR0naf-IAgqC0ireg_vTPIvu9q0dK_n0gqKdNHhWFhvOyvhjWph-boPTWYk"" />
-        <h1 style="" color: #59c91c; font-family: "" Nunito Sans"", ""Helvetica Neue"" , sans-serif;
-            font-weight: 900;
-            font-size: 40px;
-            margin-bottom: 10px;"">
-            Hợp đồng
-        </h1>
-        <p style="" padding-top: 5px;
-        color: #404F5E;
-        font-family: "" Nunito Sans"", ""Helvetica Neue"" , sans-serif;
-           font-size: 20px;
-           margin: 0;"">Verification Code</p>
-           <p style="" padding-top: 5px;
-           color: #404F5E;
-          
-           font-family: "" Nunito Sans"", ""Helvetica Neue"" , sans-serif;
-              font-size: 20px;
-              margin: 0;"">" + verificationCode + @" </p>               
-</body></html>";
+                              <html lang=""en"">
+                              <head>
+                              <meta charset=""utf-8"" />
+                              <meta name=""viewport"" content=""width=device-width, initial-scale=1.0"" />
+                              </head>
+                              <body style="" text-align: center; padding: 40px 0; background: #EBF0F5;  width: 100%; height: 100%;"">
+                              <div style="" background: white;   padding-left: 300px;padding-right: 300px; padding-top: 50;padding-bottom: 50px;border-radius: 4px;
+                              box-shadow: 0 2px 3px #C8D0D8;display: inline-block;margin: 0 auto;"" class=""card"">
+                              <h1 style="" color: #008CBA;font-size: 40px;"">Milk</h1>
+                              <hr />
+                              <img style="""" src=""https://firebasestorage.googleapis.com/v0/b/carmanaager-upload-file.appspot.com/o/images%2Flogo-color%20(1).pngeddab547-393c-4a52-8228-389b00aeacad?alt=media&token=a9fe5d57-b871-46a0-a9da-508902f09832&fbclid=IwAR0naf-IAgqC0ireg_vTPIvu9q0dK_n0gqKdNHhWFhvOyvhjWph-boPTWYk"" />
+                              <h1 style="" color: #59c91c; font-family: "" Nunito Sans"", ""Helvetica Neue"" , sans-serif;font-weight: 900;font-size: 40px;margin-bottom: 10px;"">
+                              Verification Code
+                              </h1>
+                              <p style="" padding-top: 5px;color: #404F5E;font-family: "" Nunito Sans"", ""Helvetica Neue"" , sans-serif;font-size: 20px;margin: 0;"">"
+                              + verificationCode +
+                              " </p></body></html>";
                 var newAcc = new TblAccount
                 {
                     IsDeleted = false,

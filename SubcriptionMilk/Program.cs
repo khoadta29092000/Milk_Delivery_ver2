@@ -24,7 +24,7 @@ builder.Services.AddControllers()
         // Thêm các cấu hình khác theo nhu cầu của bạn
     });
 builder.Services.AddDbContext<MilkDBContext>();
-builder.Services.AddScoped<VerificationCodeCleanupService>();
+builder.Services.AddHostedService<VerificationCodeCleanupService>();
 
 builder.Services.AddSingleton<IRepositoryAccount, AccountRepository>();
 builder.Services.AddSingleton<IRepositoryVerificationCode, VerificationCodeRepository>();
@@ -79,6 +79,8 @@ builder.Services.AddSwaggerGen();
 
 
 var app = builder.Build();
+
+
 app.UseCors(builder => builder
               .AllowAnyHeader()
               .AllowAnyMethod()
@@ -88,12 +90,12 @@ app.UseCors(builder => builder
                                               )
           );
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
 {
+    app.UseDeveloperExceptionPage();
     app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "SubcriptionMilk v1"));
 }
-
 app.UseAuthentication();
 
 app.UseAuthorization();
@@ -115,5 +117,5 @@ app.UseHttpsRedirection();
 
 app.MapControllers();
 
-app.Run();
+await app.RunAsync();
 
