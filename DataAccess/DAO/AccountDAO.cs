@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Text;
 using BusinessObject.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Cryptography;
+using DataAccess.DTO.Account;
 
 namespace DataAccess.DAO
 {
@@ -28,6 +25,8 @@ namespace DataAccess.DAO
                 }
             }
         }
+
+
         public static async Task<List<TblAccount>> GetMembers()
         {
             var members = new List<TblAccount>();
@@ -66,7 +65,7 @@ namespace DataAccess.DAO
         }
 
 
-        public async Task<TblAccount> Login(string email, string password)
+        public static async Task<TblAccount> Login(string email, string password)
         {
 
             IEnumerable<TblAccount> members = await GetMembers();
@@ -77,8 +76,6 @@ namespace DataAccess.DAO
         {
             try
             {
-
-
                 using (var context = new MilkDBContext())
                 {
                     var p1 = await context.TblAccounts.FirstOrDefaultAsync(c => c.Email.Equals(m.Email));
@@ -106,29 +103,43 @@ namespace DataAccess.DAO
                 throw new Exception(ex.Message);
             }
         }
-
+        public static async Task addTblAccountPoint(TblMemberPoint m)
+        {
+            try
+            {
+                using (var context = new MilkDBContext())
+                {
+                    context.TblMemberPoints.Add(m);
+                    await context.SaveChangesAsync();
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
         public static async Task UpdateTblAccount(TblAccount m)
         {
             try
             {
                 using (var context = new MilkDBContext())
                 {
-                        // Kiểm tra xem đối tượng m đã được theo dõi trong context hay chưa
-                        var existingEntity = context.TblAccounts.Local.FirstOrDefault(e => e.Id == m.Id);
-                        if (existingEntity != null)
-                        {
-                            // Nếu đã được theo dõi, cập nhật trực tiếp trên đối tượng đó
-                            context.Entry(existingEntity).CurrentValues.SetValues(m);
-                        }
-                        else
-                        {
-                            // Nếu chưa được theo dõi, đính kèm và đánh dấu là sửa đổi
-                            context.Attach(m);
-                            context.Entry(m).State = EntityState.Modified;
-                        }
-
-                        await context.SaveChangesAsync();
+                    // Kiểm tra xem đối tượng m đã được theo dõi trong context hay chưa
+                    var existingEntity = context.TblAccounts.Local.FirstOrDefault(e => e.Id == m.Id);
+                    if (existingEntity != null)
+                    {
+                        // Nếu đã được theo dõi, cập nhật trực tiếp trên đối tượng đó
+                        context.Entry(existingEntity).CurrentValues.SetValues(m);
                     }
+                    else
+                    {
+                        // Nếu chưa được theo dõi, đính kèm và đánh dấu là sửa đổi
+                        context.Attach(m);
+                        context.Entry(m).State = EntityState.Modified;
+                    }
+
+                    await context.SaveChangesAsync();
+                }
             }
             catch (Exception ex)
             {
@@ -162,45 +173,44 @@ namespace DataAccess.DAO
                 throw new Exception(e.Message);
             }
         }
-        public async Task<List<TblAccount>> SearchByEmail(string? search, int RoleId, int page, int pageSize)
+        public static async Task<List<GetAllAccountDTO>> SearchByEmail(string? search, int RoleId, int page, int pageSize)
         {
-            List<TblAccount> searchResult = null;
-            IEnumerable<TblAccount> searchValues = await GetMembers();
-            if (page == 0 || pageSize == 0)
+            using (var context = new MilkDBContext())
             {
-                page = 1;
-                pageSize = 1000;
-            }
-            if (search == null)
-            {
-
-
-                if (RoleId != 0)
+                List<TblAccount> searchResult = null;
+                IEnumerable<TblAccount> searchValues = await GetMembers();
+                if (page == 0 || pageSize == 0)
                 {
-                    searchValues = searchValues.Where(c => c.RoleId == RoleId).ToList();
+                    page = 1;
+                    pageSize = 100000000;
                 }
-                searchValues = searchValues.Select(c => new TblAccount
-                {
-                    Id = c.Id,
-                    FullName = c.FullName,
-                    Email = c.Email,
-                    Address = c.Address,
-                    PhoneNumber = c.PhoneNumber,
-                    Gender = c.Gender,
-                    ImageCard = c.ImageCard,
-                    CreateDate = c.CreateDate,
-                    IsDeleted = c.IsDeleted,
-                    IsVerified = c.IsVerified
-                }).Skip((page - 1) * pageSize).Take(pageSize);
-                searchResult = searchValues.ToList();
-            }
-
-            else
-            {
-                using (var context = new MilkDBContext())
+                searchValues = await (from member in context.TblAccounts
+                                      join point in context.TblMemberPoints on member.Id equals point.AccountId
+                                      select new TblAccount
+                                      {
+                                          Id = member.Id,
+                                          FullName = member.FullName,
+                                          Email = member.Email,
+                                          Address = member.Address,
+                                          PhoneNumber = member.PhoneNumber,
+                                          Gender = member.Gender,
+                                          ImageCard = member.ImageCard,
+                                          RoleId = member.RoleId,
+                                          CreateDate = member.CreateDate,
+                                          IsDeleted = member.IsDeleted,
+                                          IsVerified = member.IsVerified,
+                                          StationId = member.StationId,
+                                          TblMemberPoint = new TblMemberPoint
+                                          {
+                                              PurchaseTimes = point.PurchaseTimes,
+                                              MemberPoints = point.MemberPoints
+                                          },
+                                      }).ToListAsync();
+                if (search != null)
                 {
                     searchValues = await (from member in context.TblAccounts
                                           where member.Email.ToLower().Contains(search.ToLower())
+                                          join point in context.TblMemberPoints on member.Id equals point.AccountId
                                           select new TblAccount
                                           {
                                               Id = member.Id,
@@ -213,30 +223,112 @@ namespace DataAccess.DAO
                                               RoleId = member.RoleId,
                                               CreateDate = member.CreateDate,
                                               IsDeleted = member.IsDeleted,
-                                              IsVerified = member.IsVerified
+                                              IsVerified = member.IsVerified,
+                                              StationId = member.StationId,
+                                              TblMemberPoint = new TblMemberPoint
+                                              {
+                                                  PurchaseTimes = point.PurchaseTimes,
+                                                  MemberPoints = point.MemberPoints
+                                              },
                                           }).ToListAsync();
 
-                    if (RoleId != 0)
+                }
+                if (RoleId != 0)
+                {
+                    searchValues = searchValues.Where(c => c.RoleId == RoleId).ToList();
+                }
+                searchValues = searchValues.Skip((page - 1) * pageSize).Take(pageSize);
+                searchResult = searchValues.ToList();
+
+                return searchResult.Select(member => new GetAllAccountDTO
+                {
+                    Id = member.Id,
+                    FullName = member.FullName,
+                    Email = member.Email,
+                    Address = member.Address,
+                    PhoneNumber = member.PhoneNumber,
+                    Gender = member.Gender,
+                    ImageCard = member.ImageCard,
+                    RoleId = member.RoleId,
+                    CreateDate = member.CreateDate,
+                    IsDeleted = member.IsDeleted,
+                    IsVerified = member.IsVerified,
+                    StationId = member.StationId,
+                    PurchaseTimes = member.TblMemberPoint.PurchaseTimes,
+                    MemberPoints = member.TblMemberPoint.MemberPoints,
+                }).ToList();
+            }
+        }
+        public static async Task<TblAccount> GetProfile(string TblAccountID)
+        {
+            try
+            {
+                using (var context = new MilkDBContext())
+                {
+                    IEnumerable<TblAccount> accounts = await GetMembers();
+                    TblAccount member = accounts.SingleOrDefault(mb => mb.Id == TblAccountID);
+                    TblMemberPoint value = context.TblMemberPoints.SingleOrDefault(x => x.AccountId == member.Id);
+                    TblAccount lastAccount = new TblAccount
                     {
-                        searchValues = searchValues.Where(c => c.RoleId == RoleId).ToList();
-                    }
-                    searchValues = searchValues.Skip((page - 1) * pageSize).Take(pageSize);
-                    searchResult = searchValues.ToList();
-
-
+                        Id = member.Id,
+                        FullName = member.FullName,
+                        Email = member.Email,
+                        Address = member.Address,
+                        PhoneNumber = member.PhoneNumber,
+                        Gender = member.Gender,
+                        ImageCard = member.ImageCard,
+                        RoleId = member.RoleId,
+                        CreateDate = member.CreateDate,
+                        IsDeleted = member.IsDeleted,
+                        IsVerified = member.IsVerified,
+                        StationId = member.StationId,
+                        TblMemberPoint = new TblMemberPoint
+                        {
+                            PurchaseTimes = value.PurchaseTimes,
+                            MemberPoints = value.MemberPoints
+                        }
+                    };
+                return lastAccount;
                 }
             }
-
-            return searchResult;
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
-        public async Task<TblAccount> GetProfile(string TblAccountID)
+        public static async Task<List<TblDiscountCode>> GetDiscountCodeByAccount(string TblAccountID, int page, int pageSize)
         {
+            var searchResult = new List<TblDiscountCode>();
+            List<TblDiscountCode> searchResult1 = null;
 
-            IEnumerable<TblAccount> members = await GetMembers();
-            TblAccount member = members.SingleOrDefault(mb => mb.Id == TblAccountID);
-            return member;
+            // IEnumerable<MemberObject> searchResult = null;
+            try
+            {
+                if (page == 0 || pageSize == 0)
+                {
+                    page = 1;
+                    pageSize = int.MaxValue;
+                }
+                using (var context = new MilkDBContext())
+                {
+
+                    IEnumerable<TblDiscountCode> searchValues = await (from discountCode in context.TblDiscountCodes
+                                                            where discountCode.TblDiscountOfAccounts.Any(c => c.AccountId == TblAccountID)
+                                                            select discountCode).ToListAsync();
+                    searchValues = searchValues.Skip((page - 1) * pageSize).Take(pageSize);
+                    searchResult1 = searchValues.ToList();
+                    // searchValues =  searchValues.Skip((page - 1) * pageSize).Take(pageSize);
+
+                }
+                return searchResult1;
+
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
         }
-        public async Task ChangePassword(string TblAccountID, string password)
+        public static async Task ChangePassword(string TblAccountID, string password)
         {
             try
             {
@@ -253,7 +345,7 @@ namespace DataAccess.DAO
                 throw new Exception(ex.Message);
             }
         }
-        public async Task UpdateActive(string TblAccountID, bool acticve)
+        public static async Task UpdateActive(string TblAccountID, bool acticve)
         {
 
             try
@@ -272,7 +364,7 @@ namespace DataAccess.DAO
                 throw new Exception(ex.Message);
             }
         }
-        public async Task VerificationAccount(string TblAccountID, bool acticve)
+        public static async Task VerificationAccount(string TblAccountID, bool acticve)
         {
 
             try

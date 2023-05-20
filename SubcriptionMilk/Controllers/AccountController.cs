@@ -6,10 +6,10 @@ using System.Text;
 using Microsoft.IdentityModel.Tokens;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
-using SubcriptionMilk.DTO;
 using System.Security.Cryptography;
 using EASendMail;
-using System.Xml;
+using DataAccess.DTO.Account;
+using DataAccess.DTO.Token;
 
 namespace SubcriptionMilk.Controllers
 {
@@ -26,10 +26,6 @@ namespace SubcriptionMilk.Controllers
             this.configuration = configuration;
             repositoryVerificationCode = _repositoryVerificationCode;
         }
-
-
-
-
         public static string GenerateSalt()
         {
             byte[] saltBytes = new byte[16];
@@ -85,6 +81,22 @@ namespace SubcriptionMilk.Controllers
             try
             {
                 var Result = await repositoryAccount.GetProfile(id);
+                return Ok(new { StatusCode = 200, Message = "Load successful", data = Result });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(409, new { StatusCode = 409, Message = ex.Message });
+            }
+        }
+        [HttpGet("Discount")]
+        [Authorize]
+        public async Task<ActionResult> GetDiscountOfAccount(int page, int pageSize)
+        {
+            try
+            {
+                string userId = User.FindFirst("Id")?.Value;
+                TblAccount account = await repositoryAccount.GetProfile(userId);
+                var Result = await repositoryAccount.GetDiscountCodeByAccount(account.Id ,page, pageSize);
                 return Ok(new { StatusCode = 200, Message = "Load successful", data = Result });
             }
             catch (Exception ex)
@@ -155,11 +167,12 @@ namespace SubcriptionMilk.Controllers
             return jwtTokenHandler.WriteToken(token);
         }
         [HttpPost]
-        [Authorize(Roles = "1")]
+        //[Authorize(Roles = "1")]
         public async Task<IActionResult> Create(AccountDTO acc)
         {
             try
             {
+                DateTime currentDateSQL = DateTime.SpecifyKind(DateTime.Now, DateTimeKind.Local);
                 DateTime currentDate = DateTime.Now;
                 string formatDate = currentDate.ToString("ddMMyyyy");
                 var saltPassword = GenerateSalt();
@@ -169,21 +182,29 @@ namespace SubcriptionMilk.Controllers
                 var id = "ACC" + formatDate + (count + 1);
                 var newAcc = new TblAccount
                 {
-                    IsDeleted = acc.IsDeleted,
+                    IsDeleted = false,
                     Address = acc.Address,
-                    ImageCard = acc.ImageCard,
-                    CreateDate = acc.CreateDate,
+                    ImageCard = "https://bloganchoi.com/wp-content/uploads/2022/02/avatar-trang-y-nghia.jpeg",
+                    CreateDate = currentDateSQL,
                     Email = acc.Email,
                     FullName = acc.FullName,
                     Gender = acc.Gender,
-                    RoleId = acc.RoleId,
-                    PhoneNumber = acc.PhoneNumber,
-                    Id = id,
                     HashedPassword = hashPassword,
                     SaltPassword = saltPassword,
-                    IsVerified = false,
+                    Id = id,
+                    PhoneNumber = acc.PhoneNumber,
+                    RoleId = acc.RoleId,
+                    IsVerified = true
+                };
+                var newAccPoint = new TblMemberPoint
+                {
+                    AccountId = id,
+                    MemberPoints = 0,
+                    PurchaseTimes = 0,
                 };
                 await repositoryAccount.AddMember(newAcc);
+                await repositoryAccount.AddMemberPoint(newAccPoint);
+               
                 return Ok(new { StatusCode = 200, Message = "Add successful" });
             }
             catch (Exception ex)
@@ -250,10 +271,15 @@ namespace SubcriptionMilk.Controllers
                     Code = verificationCode,
                     ExpirationTime = DateTime.Now,
                 };
+                var newAccPoint = new TblMemberPoint
+                {
+                    AccountId = id,
+                    MemberPoints = 0,
+                    PurchaseTimes = 0,
+                };
                 await repositoryAccount.AddMember(newAcc);
                 await repositoryVerificationCode.AddVerificationCode(newVerificationCode);
-
-
+                await repositoryAccount.AddMemberPoint(newAccPoint);
                 SmtpMail oMail = new SmtpMail("TryIt");
                 oMail.From = "system.milk.delivery@gmail.com";
                 oMail.To = acc.Email;
@@ -308,6 +334,13 @@ namespace SubcriptionMilk.Controllers
                         CreateDate = currentDate,
                         SaltPassword = GenerateSalt(),
                     };
+                    var newAccPoint = new TblMemberPoint
+                    {
+                        AccountId = id,
+                        MemberPoints = 0,
+                        PurchaseTimes = 0,
+                    };
+                    await repositoryAccount.AddMemberPoint(newAccPoint);
                     await repositoryAccount.AddMember(newAcc);
                     var member = AccountList.SingleOrDefault(x => x.Email == newAcc.Email);
                     return Ok(new { StatusCode = 200, Message = "Login SuccessFully", data = GenerateToken(newAcc) });
@@ -325,7 +358,7 @@ namespace SubcriptionMilk.Controllers
 
         [HttpPut("{id}")]
         //[Authorize]
-        public async Task<IActionResult> update(string id, TblAccount acc)
+        public async Task<IActionResult> update(string id, GetAllAccountDTO acc)
         {
             if (id != acc.Id)
             {
@@ -349,10 +382,11 @@ namespace SubcriptionMilk.Controllers
                     PhoneNumber = acc.PhoneNumber,
                     RoleId = acc.RoleId,
                     IsVerified = true,
+                    StationId = acc.StationId,
                 };
                 await repositoryAccount.UpdateMember(Acc);
                 return Ok(new { StatusCode = 200, Message = "Update successful" });
-            }
+            }   
             catch (Exception ex)
             {
                 return StatusCode(409, new { StatusCode = 409, Message = ex.Message });

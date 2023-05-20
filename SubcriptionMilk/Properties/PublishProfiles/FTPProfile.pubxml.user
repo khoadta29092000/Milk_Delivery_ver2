@@ -6,7 +6,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
   <PropertyGroup>
     <TimeStampOfAssociatedLegacyPublishXmlFile />
     <EncryptedPassword>AQAAANCMnd8BFdERjHoAwE/Cl+sBAAAAwMBZmWNK2UKS9/tjtgkePAAAAAACAAAAAAAQZgAAAAEAACAAAAChjZwbSrrS4KqQZhT7aZs7ax2Ebz3uPjyGqZR/z7LS0QAAAAAOgAAAAAIAACAAAACSZrj0JUhOAKM6VXO27wSxPz2dT6buH121o9yJsyT0zCAAAACcHicSGomV4NgJ8i8lhH+2i1exsnJcCfCneNn9y0MW1kAAAAC0jF6A80PJVaEi8HXVdlo1R1VLtQ9a/gM9eQndwzSTH4N25Q3x8TwpJl6B1Zrv5x/n5QZFY0aYQao33U+Dw/qV</EncryptedPassword>
-    <History>True|2023-05-16T06:01:01.7491163Z;False|2023-05-16T12:53:55.0088451+07:00;</History>
+    <History>True|2023-05-17T19:23:04.1699887Z;True|2023-05-16T13:01:01.7491163+07:00;False|2023-05-16T12:53:55.0088451+07:00;</History>
     <LastFailureDetails />
     <_PublishTargetUrl>ftp://155.254.244.35/www.MileDelivery.somee.com</_PublishTargetUrl>
   </PropertyGroup>
@@ -24,16 +24,16 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>09/20/2022 03:31:34</publishTime>
     </File>
     <File Include="BusinessObject.dll">
-      <publishTime>05/16/2023 12:51:27</publishTime>
+      <publishTime>05/18/2023 02:22:03</publishTime>
     </File>
     <File Include="BusinessObject.pdb">
-      <publishTime>05/16/2023 12:51:27</publishTime>
+      <publishTime>05/18/2023 02:22:03</publishTime>
     </File>
     <File Include="DataAccess.dll">
-      <publishTime>05/16/2023 12:51:28</publishTime>
+      <publishTime>05/18/2023 02:22:04</publishTime>
     </File>
     <File Include="DataAccess.pdb">
-      <publishTime>05/16/2023 12:51:28</publishTime>
+      <publishTime>05/18/2023 02:22:04</publishTime>
     </File>
     <File Include="EASendMail.dll">
       <publishTime>05/16/2023 01:46:22</publishTime>
@@ -150,16 +150,16 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>10/23/2021 06:49:58</publishTime>
     </File>
     <File Include="SubcriptionMilk.deps.json">
-      <publishTime>05/16/2023 12:54:07</publishTime>
+      <publishTime>05/18/2023 02:22:12</publishTime>
     </File>
     <File Include="SubcriptionMilk.dll">
-      <publishTime>05/16/2023 12:54:06</publishTime>
+      <publishTime>05/18/2023 02:22:12</publishTime>
     </File>
     <File Include="SubcriptionMilk.exe">
-      <publishTime>05/16/2023 12:54:06</publishTime>
+      <publishTime>05/18/2023 02:22:12</publishTime>
     </File>
     <File Include="SubcriptionMilk.pdb">
-      <publishTime>05/16/2023 12:54:06</publishTime>
+      <publishTime>05/18/2023 02:22:12</publishTime>
     </File>
     <File Include="SubcriptionMilk.runtimeconfig.json">
       <publishTime>05/16/2023 12:51:29</publishTime>
@@ -201,7 +201,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>10/23/2021 06:49:44</publishTime>
     </File>
     <File Include="web.config">
-      <publishTime>05/16/2023 12:54:07</publishTime>
+      <publishTime>05/18/2023 02:22:12</publishTime>
     </File>
   </ItemGroup>
 </Project>

@@ -7,6 +7,8 @@ namespace BusinessObject.Models
     {
         public TblAccount()
         {
+            TblDiscountOfAccounts = new HashSet<TblDiscountOfAccount>();
+            TblOrders = new HashSet<TblOrder>();
             TblVerificationCodes = new HashSet<TblVerificationCode>();
         }
 
@@ -23,8 +25,13 @@ namespace BusinessObject.Models
         public DateTime CreateDate { get; set; }
         public bool IsDeleted { get; set; }
         public bool IsVerified { get; set; }
+        public string? StationId { get; set; }
 
-        public virtual TblRole? Role { get; set; }
+        public virtual TblRole Role { get; set; } = null!;
+        public virtual TblStation? Station { get; set; }
+        public virtual TblMemberPoint? TblMemberPoint { get; set; }
+        public virtual ICollection<TblDiscountOfAccount> TblDiscountOfAccounts { get; set; }
+        public virtual ICollection<TblOrder> TblOrders { get; set; }
         public virtual ICollection<TblVerificationCode> TblVerificationCodes { get; set; }
     }
 }

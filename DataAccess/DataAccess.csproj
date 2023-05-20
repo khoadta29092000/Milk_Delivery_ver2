@@ -7,7 +7,6 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<Folder Include="DAO\" />
 		<ProjectReference Include="..\BusinessObject\BusinessObject.csproj" />
 	</ItemGroup>
 

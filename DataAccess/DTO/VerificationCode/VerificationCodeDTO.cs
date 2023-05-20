@@ -1,7 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿
 
-namespace SubcriptionMilk.DTO
+namespace DataAccess.DTO.VerificationCode
 {
     public partial class VerificationCodeDTO
     {

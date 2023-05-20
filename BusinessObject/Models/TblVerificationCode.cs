@@ -10,6 +10,6 @@ namespace BusinessObject.Models
         public string Code { get; set; } = null!;
         public DateTime ExpirationTime { get; set; }
 
-        public virtual TblAccount? Account { get; set; }
+        public virtual TblAccount Account { get; set; } = null!;
     }
 }

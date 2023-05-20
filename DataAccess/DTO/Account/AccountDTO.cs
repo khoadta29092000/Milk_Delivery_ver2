@@ -1,6 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-namespace SubcriptionMilk.DTO
+﻿
+
+namespace DataAccess.DTO.Account
 
 {
     public partial class AccountDTO
@@ -13,8 +13,5 @@ namespace SubcriptionMilk.DTO
         public bool Gender { get; set; }
         public string? ImageCard { get; set; }
         public int RoleId { get; set; }
-        public DateTime CreateDate { get; set; }
-        public bool IsDeleted { get; set; }
-        public bool isVerified { get; set; }
     }
 }

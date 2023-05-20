@@ -1,8 +1,6 @@
-﻿using BusinessObject.Models;
-using System;
-using System.Collections.Generic;
+﻿
 
-namespace SubcriptionMilk.DTO
+namespace DataAccess.DTO.Account
 {
     public partial class RegisterDTO
     {

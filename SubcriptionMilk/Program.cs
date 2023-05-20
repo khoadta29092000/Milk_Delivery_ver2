@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
@@ -28,6 +27,9 @@ builder.Services.AddHostedService<VerificationCodeCleanupService>();
 
 builder.Services.AddSingleton<IRepositoryAccount, AccountRepository>();
 builder.Services.AddSingleton<IRepositoryVerificationCode, VerificationCodeRepository>();
+builder.Services.AddSingleton<IRepositoryStation, StationRepository>();
+builder.Services.AddSingleton<IRepositorySubscriptionDay, SubscriptionDayRepository>();
+builder.Services.AddSingleton<IRepositoryDiscountCode, DiscountCodeRepository>();
 
 var configuration = builder.Configuration;
 var secretKey = configuration["Appsettings:SecretKey"];
